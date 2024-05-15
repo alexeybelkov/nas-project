@@ -59,10 +59,11 @@ if __name__ == '__main__':
     print_results(unpruned_results)
     print('------------ END TRAIN UNPRUNED MLP ------------')
 
-    print('------------ START TRAIN PRUNED MLP ------------')
-    pruned_results = train_pruned_mlp(**config, num_batch=1)
-    print_results(pruned_results)
-    print('------------ END TRAIN PRUNED MLP ------------')
+    for num_batch in range(1, 6):
+        print(f'------------ START TRAIN PRUNED MLP num_batch = {num_batch} ------------')
+        pruned_results = train_pruned_mlp(**config, num_batch=num_batch)
+        print_results(pruned_results)
+        print('------------ END TRAIN PRUNED MLP ------------')
 
 
     
