@@ -1,0 +1,12 @@
+{
+    "SEED": 0,
+    "INPUT_DIM": 6,
+    "NUM_WORKERS": 8,
+    "BATCH_SIZE": 512,
+    "NUM_THREADS": 1,
+    "HIDDEN_DIM": 20,
+    "LR": 1e-2,
+    "NUM_EPOCHS": 20,
+    "NUM_LAUNCHES": 4,
+    "GAIN": 1e-20
+}
