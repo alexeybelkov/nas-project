@@ -35,7 +35,7 @@ Expected output will be:
 - Number of parameters
 - Model     
 
-It will be printed out during *run.py *
+It will be printed out during *run.py*
 
 
 
