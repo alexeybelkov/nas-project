@@ -13,8 +13,8 @@ def seed_worker(worker_id):
     random.seed(worker_seed)
 
 
-def set_params(num_workers=NUM_WORKERS, batch_size=BATCH_SIZE,
-               num_threads=NUM_THREADS, seed=SEED):
+def set_params(num_workers, batch_size,
+               num_threads, seed):
 
     os.environ["CUBLAS_WORKSPACE_CONFIG"] = ":4096:8"
     
@@ -46,9 +46,9 @@ def set_params(num_workers=NUM_WORKERS, batch_size=BATCH_SIZE,
     return train_dataloader, val_dataloader, test_dataloader
 
 
-def weight_init(m):
+def weight_init(m, gain=1e-20):
     if isinstance(m, nn.Linear):
-        nn.init.xavier_uniform_(m.weight, gain=GAIN)
+        nn.init.xavier_uniform_(m.weight, gain=gain)
         if hasattr(m, 'bias') and m.bias is not None:
             nn.init.zeros_(m.bias)
 

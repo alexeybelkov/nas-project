@@ -129,9 +129,9 @@ def calculate_lr(loader, mlp, device, num_batch=1):
     return lrs
 
 
-def TENAS(loader, mlp, device, num_batch=1):
+def TENAS(loader, mlp, space_size, device, num_batch=1):
 
-  for cur_size in range(SPACE_SIZE, 1, -1):
+  for cur_size in range(space_size, 1, -1):
     k = calculate_k(loader, mlp, device, num_batch)
     lr = calculate_lr(loader, mlp, device, num_batch)
 

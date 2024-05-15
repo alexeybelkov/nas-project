@@ -3,11 +3,12 @@ import numpy as np
 from copy import deepcopy
 from .utils import weight_init, num_params, set_params
 import torch.nn.functional as torchF
-from modules import *
+from .modules import *
+from .tenas import TENAS
 
 
 def train(model, device, train_loader, val_loader, test_loader,
-          learning_rate=LR, num_epochs=NUM_EPOCHS, launches=NUM_LAUNCHES):
+          learning_rate, num_epochs, launches):
 
     launch_losses = []
     for launch in range(launches): 
@@ -62,48 +63,48 @@ def train(model, device, train_loader, val_loader, test_loader,
     return np.mean(launch_losses), np.std(launch_losses)
 
 
-def train_unpruned_mlp(device=DEVICE, hidden_dim=HIDDEN_DIM,
-                       learning_rate=LR, num_epochs=NUM_EPOCHS, launches=NUM_LAUNCHES,
-                       num_workers=NUM_WORKERS, batch_size=BATCH_SIZE,
-                       num_threads=NUM_THREADS, seed=SEED, num_batch=None):
+def train_unpruned_mlp(device, input_dim, hidden_dim,
+                       lr, num_epochs, num_launches,
+                       num_workers, batch_size,
+                       num_threads, seed, num_batch=None, **kwargs):
     """
     Output: Mean MSE on Test, Std MSE on Test, Number of params in model, Architecture 
     """
-    mlp = MLP(INPUT_DIM, hidden_dim).to(device)
+    mlp = MLP(input_dim, hidden_dim).to(device)
 
     n_param = num_params(mlp)
 
     train_loader, val_loader, test_loader = set_params(num_workers, batch_size, num_threads, seed)
 
     return train(mlp, device, train_loader, val_loader, test_loader,
-                 learning_rate, num_epochs, launches), n_param, str(mlp)
+                 lr, num_epochs, num_launches), n_param, str(mlp)
 
 
-def train_classic_mlp(device=DEVICE, hidden_dim=HIDDEN_DIM,
-                      learning_rate=LR, num_epochs=NUM_EPOCHS, launches=NUM_LAUNCHES,
-                      num_workers=NUM_WORKERS, batch_size=BATCH_SIZE,
-                      num_threads=NUM_THREADS, seed=SEED, num_batch=None):
-    mlp = ClassicMLP(INPUT_DIM, hidden_dim).to(device)
+def train_classic_mlp(device, input_dim, hidden_dim,
+                      lr, num_epochs, num_launches,
+                      num_workers, batch_size,
+                      num_threads, seed, num_batch=None, **kwargs):
+    mlp = ClassicMLP(input_dim, hidden_dim).to(device)
 
     n_param = num_params(mlp)
 
     train_loader, val_loader, test_loader = set_params(num_workers, batch_size, num_threads, seed)
 
     return train(mlp, device, train_loader, val_loader, test_loader,
-                 learning_rate, num_epochs, launches), n_param, str(mlp)
+                 lr, num_epochs, num_launches), n_param, str(mlp)
 
 
-def train_pruned_mlp(device=DEVICE, hidden_dim=HIDDEN_DIM,
-                     learning_rate=LR, num_epochs=NUM_EPOCHS, launches=NUM_LAUNCHES,
-                     num_workers=NUM_WORKERS, batch_size=BATCH_SIZE,
-                     num_threads=NUM_THREADS, seed=SEED, num_batch=1):
-    mlp = MLP(INPUT_DIM, hidden_dim).to(device)
+def train_pruned_mlp(device, input_dim, hidden_dim,
+                     lr, num_epochs, num_launches,
+                     num_workers, batch_size,
+                     num_threads, seed, space_size, num_batch=1, **kwargs):
+    mlp = MLP(input_dim, hidden_dim).to(device)
     
     train_loader, val_loader, test_loader = set_params(num_workers, batch_size, num_threads, seed)
 
-    pruned_mlp = TENAS(train_loader, mlp, device, num_batch)
+    pruned_mlp = TENAS(train_loader, mlp, space_size, device, num_batch)
 
     n_param = num_params(pruned_mlp)
 
     return train(pruned_mlp, device, train_loader, val_loader, test_loader,
-                 learning_rate, num_epochs, launches), n_param, str(pruned_mlp)
+                 lr, num_epochs, num_launches), n_param, str(pruned_mlp)

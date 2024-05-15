@@ -7,7 +7,7 @@ def print_results(res):
     print(f'mean = {res[0][0]}')
     print(f'std = {res[0][1]}')
     print('NUMBER OF PARAMETERS')
-    print(f'res[1]')
+    print(res[1])
     print('MODEL')
     print(res[-1])
 
@@ -30,18 +30,18 @@ if __name__ == '__main__':
     args = parser.parse_args()
     config = deli.load_json(args.config)
 
-    DEVICE = args.device
-    SEED = config["SEED"]
-    INPUT_DIM = config["INPUT_DIM"]
-    NUM_WORKERS = config["NUM_WORKERS"]
-    BATCH_SIZE = config["BATCH_SIZE"]
-    NUM_THREADS = config["NUM_THREADS"]
-    HIDDEN_DIM = config["HIDDEN_DIM"]
-    LR = config["LR"]
-    NUM_EPOCHS = config["NUM_EPOCHS"]
-    NUM_LAUNCHES = config["NUM_LAUNCHES"]
-    GAIN = config["GAIN"]
-    SPACE_SIZE = config["SPACE_SIZE"]
+    config['device'] = args.device
+    # SEED = config["seed"]
+    # INPUT_DIM = config["input_dim"]
+    # NUM_WORKERS = config["num_workers"]
+    # BATCH_SIZE = config["batch_size"]
+    # NUM_THREADS = config["num_threads"]
+    # HIDDEN_DIM = config["hidden_dim"]
+    # LR = config["lr"]
+    # NUM_EPOCHS = config["num_epochs"]
+    # NUM_LAUNCHES = config["num_launches"]
+    # GAIN = config["gain"]
+    # SPACE_SIZE = config["space_size"]
 
 
     from src.train import (train_classic_mlp, 
@@ -51,18 +51,18 @@ if __name__ == '__main__':
     
     print('------------ START TRAIN CLASSIC MLP ------------')
     classic_results = train_classic_mlp(**config)
-    print('------------ END TRAIN CLASSIC MLP ------------')
     print_results(classic_results)
+    print('------------ END TRAIN CLASSIC MLP ------------')
 
     print('------------ START TRAIN UNPRUNED MLP ------------')
     unpruned_results = train_unpruned_mlp(**config)
-    print('------------ END TRAIN UNPRUNED MLP ------------')
     print_results(unpruned_results)
+    print('------------ END TRAIN UNPRUNED MLP ------------')
 
     print('------------ START TRAIN PRUNED MLP ------------')
-    pruned_results = train_pruned_mlp(*config, num_batch=1)
-    print('------------ END TRAIN PRUNED MLP ------------')
+    pruned_results = train_pruned_mlp(**config, num_batch=1)
     print_results(pruned_results)
+    print('------------ END TRAIN PRUNED MLP ------------')
 
 
     
