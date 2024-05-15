@@ -1,4 +1,4 @@
-# nas-project       
+# Train-Free NAS for Tabular Data     
 ## [Neural architecture search for tabular DNN via train-free NAS](https://github.com/diff7/Efficient-DL-models-Seminars?tab=readme-ov-file#3-neural-architecture-search-for-tabular-dnn-via-train-free-nas)        
 
 > [!WARNING] 
