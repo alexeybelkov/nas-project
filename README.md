@@ -27,15 +27,15 @@ You may provide your own config file in json format
 
 ### Experiments
 
-Detailed description of experiments can be found in the REPORT.pdf
+Detailed description of experiments can be found in the *REPORT.pdf*
 
-By default *run.py* will run experiments as in the REPORT.pdf with default parameters from config.json file        
+By default *run.py* will run experiments as in the *REPORT.pdf* with default parameters from config.json file        
 Expected output will be:
 - Mean and std of MSE ([Mean Squared Error](https://en.wikipedia.org/wiki/Mean_squared_error)) based on *num_launches*
 - Number of parameters
 - Model     
 
-It will be printed out during run.py 
+It will be printed out during *run.py *
 
 
 
