@@ -8,5 +8,6 @@
     "LR": 1e-2,
     "NUM_EPOCHS": 20,
     "NUM_LAUNCHES": 4,
-    "GAIN": 1e-20
+    "GAIN": 1e-20,
+    "SPACE_SIZE": 7
 }

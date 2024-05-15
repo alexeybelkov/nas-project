@@ -1,6 +1,8 @@
 import torch
+from torch import nn
 import numpy as np
 from copy import deepcopy
+from scipy.stats import rankdata as rank
 
 
 def calculate_k(loader, mlp, device, num_batch=1):
@@ -59,12 +61,12 @@ def calculate_k(loader, mlp, device, num_batch=1):
     return k
 
 
-
 def calc_LR(activations):
 
     output = torch.matmul(activations.half(), (1 - activations).T.half())
     output = 1. / (torch.sum(1 - torch.sign(output + output.T), dim=1).float() + 1e-12)
     return round(output.sum().item())
+
 
 def calculate_lr(loader, mlp, device, num_batch=1):
 
@@ -127,10 +129,9 @@ def calculate_lr(loader, mlp, device, num_batch=1):
     return lrs
 
 
-
 def TENAS(loader, mlp, device, num_batch=1):
 
-  for cur_size in range(space_size, 1, -1):
+  for cur_size in range(SPACE_SIZE, 1, -1):
     k = calculate_k(loader, mlp, device, num_batch)
     lr = calculate_lr(loader, mlp, device, num_batch)
 

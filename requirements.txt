@@ -1,7 +1,7 @@
 deli
-datasets
-pandas
-numpy
-matplotlib
-torch
-scipy
+datasets==2.19.1
+pandas==2.0.3
+numpy==1.25.2
+matplotlib==3.7.2
+torch==2.3.0
+scipy==1.11.1

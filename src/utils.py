@@ -1,9 +1,17 @@
+import os
+import torch
+from torch import nn
+import numpy as np
+import random
+from datasets import load_dataset
+from torch.utils.data import DataLoader
 
 
 def seed_worker(worker_id):
     worker_seed = torch.initial_seed() % 2 ** 32
     np.random.seed(worker_seed)
     random.seed(worker_seed)
+
 
 def set_params(num_workers=NUM_WORKERS, batch_size=BATCH_SIZE,
                num_threads=NUM_THREADS, seed=SEED):
@@ -36,3 +44,14 @@ def set_params(num_workers=NUM_WORKERS, batch_size=BATCH_SIZE,
                                 num_workers=num_workers, worker_init_fn=seed_worker, generator=g)
 
     return train_dataloader, val_dataloader, test_dataloader
+
+
+def weight_init(m):
+    if isinstance(m, nn.Linear):
+        nn.init.xavier_uniform_(m.weight, gain=GAIN)
+        if hasattr(m, 'bias') and m.bias is not None:
+            nn.init.zeros_(m.bias)
+
+
+def num_params(model):
+    return sum(dict((p.data_ptr(), p.numel()) for p in model.parameters()).values())

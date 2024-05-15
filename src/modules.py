@@ -1,6 +1,6 @@
 import torch
 from torch import nn
-
+from copy import deepcopy
 
 class Zero(nn.Module):
 
@@ -9,7 +9,37 @@ class Zero(nn.Module):
 
     def forward(self, batch):
         return torch.zeros_like(batch)
-    
+
+
+class RectLinear(nn.Module):
+
+    def __init__(self, input_dim, output_dim):
+        super().__init__()
+
+        self.nn = nn.Sequential(
+            nn.ReLU(),
+            nn.Linear(input_dim, output_dim),
+            nn.LayerNorm(output_dim)
+        )
+
+    def forward(self, batch):
+        return self.nn(batch)
+
+
+class LeakyLinear(nn.Module):
+
+    def __init__(self, input_dim, output_dim):
+        super().__init__()
+
+        self.nn = nn.Sequential(
+            nn.LeakyReLU(0.5),
+            nn.Linear(input_dim, output_dim),
+            nn.LayerNorm(output_dim)
+        )
+
+    def forward(self, batch):
+        return self.nn(batch)    
+
 
 class ClassicMLP(nn.Module):
 
@@ -31,7 +61,7 @@ class ClassicMLP(nn.Module):
     def forward(self, batch):
 
         return self.nn(batch)
-    
+
 
 class MLP(nn.Module):
 
@@ -101,6 +131,8 @@ class MLP(nn.Module):
 def get_modules(input_dim, output_dim):
 
     return nn.ModuleList([
-        Zero(), nn.Identity(), nn.ReLU(),
-        nn.Sigmoid(), nn.Linear(input_dim, output_dim)
+        Zero(), nn.Identity(), nn.ReLU(), nn.LeakyReLU(0.5),
+        RectLinear(input_dim, output_dim), 
+        LeakyLinear(input_dim, output_dim), 
+        nn.Linear(input_dim, output_dim)
     ])
